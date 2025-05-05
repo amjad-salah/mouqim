@@ -16,6 +16,7 @@ public enum FamilyState
 
 public enum RelationType
 {
+    Head,
     Parent,
     Child,
     Spouse,
@@ -51,4 +52,11 @@ public enum IncomeStatus
     Medium,
     High,
     VeryHigh
+}
+
+public enum UserRole
+{
+    Admin,
+    User,
+    Member
 }
