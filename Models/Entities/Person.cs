@@ -8,10 +8,10 @@ public class Person : BaseEntity
     [Column("full_name", TypeName = "varchar(255)")]
     public string FullName { get; set; } = string.Empty;
 
-    [Column("phone_no", TypeName = "varchar(20")]
+    [Column("phone_no", TypeName = "varchar(20)")]
     public string PhoneNo { get; set; } = string.Empty;
 
-    [Column("national_no", TypeName = "varchar(100")]
+    [Column("national_no", TypeName = "varchar(100)")]
     public string NationalNo { get; set; } = string.Empty;
 
     [Column("birth_date")] public DateTime BirthDate { get; set; }
