@@ -1,0 +1,63 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Models.DTOs.Family;
+using MouqimApi.Services.Family;
+
+namespace MouqimApi.Endpoints;
+
+public static class FamiliesEndpoints
+{
+    public static RouteGroupBuilder MapFamiliesEndpoints(this WebApplication app)
+    {
+        var group = app.MapGroup("/api/families");
+
+        //Get all families
+        //GET /api/families
+        group.MapGet("", async (IFamilyService service) =>
+        {
+            var result = await service.GetFamilies();
+            return Results.Ok(result);
+        });
+
+        //Get family by id
+        //GET /api/families/:id
+        group.MapGet("{id:int}", async (IFamilyService service, int id) =>
+        {
+            var result = await service.GetFamilyById(id);
+
+            return !result.Success ? Results.NotFound(result) : Results.Ok(result);
+        });
+
+        //Add a new family
+        //POST /api/families
+        group.MapPost("", async (IFamilyService service, AddFamilyDto dto) =>
+        {
+            var result = await service.AddFamily(dto);
+
+            return !result.Success ? Results.BadRequest(result) : Results.Created("", result);
+        });
+
+        //Update a family
+        //PUT /api/families
+        group.MapPut("", async (IFamilyService service, UpdateFamilyDto dto) =>
+        {
+            var result = await service.UpdateFamily(dto);
+
+            if (!result.Success && result.Message! == "Family not found") return Results.NotFound(result);
+
+            return !result.Success ? Results.BadRequest(result) : Results.Ok(result);
+        });
+
+        //Delete family by id
+        //DELETE /api/families/:id
+        group.MapDelete("{id:int}", async (IFamilyService service, int id) =>
+        {
+            var result = await service.DeleteFamily(id);
+
+            if (!result.Success && result.Message! == "Family not found") return Results.NotFound(result);
+
+            return !result.Success ? Results.BadRequest(result) : Results.Ok(result);
+        });
+
+        return group;
+    }
+}
