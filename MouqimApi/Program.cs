@@ -20,6 +20,8 @@ builder.Services.AddExceptionHandler<AppExceptionHandler>();
 builder.Services.AddDbContext<MouqimDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
+#region Validations
+
 builder.Services.AddScoped<IValidator<AddFamilyDto>, AddFamilyValidation>();
 builder.Services.AddScoped<IValidator<UpdateFamilyDto>, UpdateFamilyValidation>();
 builder.Services.AddScoped<IValidator<AddOccupationDto>, AddOccupationValidation>();
@@ -27,9 +29,15 @@ builder.Services.AddScoped<IValidator<UpdateOccupationDto>, UpdateOccupationVali
 builder.Services.AddScoped<IValidator<AddPersonDto>, AddPersonValidation>();
 builder.Services.AddScoped<IValidator<UpdatePersonDto>, UpdatePersonValidation>();
 
+#endregion
+
+#region Services
+
 builder.Services.AddScoped<IFamilyService, FamilyService>();
 builder.Services.AddScoped<IOccupationsService, OccupationsService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
+
+#endregion
 
 var app = builder.Build();
 
