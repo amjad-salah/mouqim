@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Family;
 using MouqimApi.Services.Family;
 
@@ -12,7 +13,7 @@ public static class FamiliesEndpoints
 
         //Get all families
         //GET /api/families
-        group.MapGet("", async (IFamilyService service) =>
+        group.MapGet("", async ([FromServices] IFamilyService service) =>
         {
             var result = await service.GetFamilies();
             return Results.Ok(result);
@@ -20,7 +21,7 @@ public static class FamiliesEndpoints
 
         //Get family by id
         //GET /api/families/:id
-        group.MapGet("{id:int}", async (IFamilyService service, int id) =>
+        group.MapGet("{id:int}", async ([FromServices] IFamilyService service, int id) =>
         {
             var result = await service.GetFamilyById(id);
 
@@ -29,7 +30,7 @@ public static class FamiliesEndpoints
 
         //Add a new family
         //POST /api/families
-        group.MapPost("", async (IFamilyService service, AddFamilyDto dto) =>
+        group.MapPost("", async ([FromServices] IFamilyService service, AddFamilyDto dto) =>
         {
             var result = await service.AddFamily(dto);
 
@@ -38,7 +39,7 @@ public static class FamiliesEndpoints
 
         //Update a family
         //PUT /api/families
-        group.MapPut("", async (IFamilyService service, UpdateFamilyDto dto) =>
+        group.MapPut("", async ([FromServices] IFamilyService service, UpdateFamilyDto dto) =>
         {
             var result = await service.UpdateFamily(dto);
 
@@ -49,7 +50,7 @@ public static class FamiliesEndpoints
 
         //Delete family by id
         //DELETE /api/families/:id
-        group.MapDelete("{id:int}", async (IFamilyService service, int id) =>
+        group.MapDelete("{id:int}", async ([FromServices] IFamilyService service, int id) =>
         {
             var result = await service.DeleteFamily(id);
 

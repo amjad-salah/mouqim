@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Person;
 using MouqimApi.Services.Person;
 
@@ -11,7 +12,7 @@ public static class PersonsEndpoints
 
         //Get all persons
         //GET /api/persons
-        group.MapGet("", async (IPersonService service) =>
+        group.MapGet("", async ([FromServices] IPersonService service) =>
         {
             var response = await service.GetAllPersons();
             return Results.Ok(response);
@@ -19,7 +20,7 @@ public static class PersonsEndpoints
 
         //Get person by id
         //GET /api/persons/:id
-        group.MapGet("{id:int}", async (IPersonService service, int id) =>
+        group.MapGet("{id:int}", async ([FromServices] IPersonService service, int id) =>
         {
             var response = await service.GetPersonById(id);
 
@@ -28,7 +29,7 @@ public static class PersonsEndpoints
 
         //Add a new person
         //POST /api/persons
-        group.MapPost("", async (IPersonService service, AddPersonDto dto) =>
+        group.MapPost("", async ([FromServices] IPersonService service, AddPersonDto dto) =>
         {
             var response = await service.AddPerson(dto);
 
@@ -37,7 +38,7 @@ public static class PersonsEndpoints
 
         //Update person by id
         //PUT /api/persons
-        group.MapPut("", async (IPersonService service, UpdatePersonDto dto) =>
+        group.MapPut("", async ([FromServices] IPersonService service, UpdatePersonDto dto) =>
         {
             var response = await service.UpdatePerson(dto);
 
@@ -49,7 +50,7 @@ public static class PersonsEndpoints
 
         //Delete a person by id
         //DELETE /api/persons/:id
-        group.MapDelete("{id:int}", async (IPersonService service, int id) =>
+        group.MapDelete("{id:int}", async ([FromServices] IPersonService service, int id) =>
         {
             var response = await service.DeletePerson(id);
 

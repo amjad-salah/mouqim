@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.EducationLevel;
 using MouqimApi.Services.EducationLevel;
 
@@ -11,7 +12,7 @@ public static class EducationLevelsEndpoints
 
         //Get all education levels
         //GET /api/educations-levels
-        group.MapGet("", async (IEducationLevelService service) =>
+        group.MapGet("", async ([FromServices] IEducationLevelService service) =>
         {
             var response = await service.GetAllEducationLevels();
 
@@ -20,7 +21,7 @@ public static class EducationLevelsEndpoints
 
         //Get education level by id
         //GET /api/educations-levels/:id
-        group.MapGet("{id:int}", async (IEducationLevelService service, int id) =>
+        group.MapGet("{id:int}", async ([FromServices] IEducationLevelService service, int id) =>
         {
             var response = await service.GetEducationLevelById(id);
 
@@ -29,7 +30,7 @@ public static class EducationLevelsEndpoints
 
         //Add a new education level
         //POST /api/educations-levels
-        group.MapPost("", async (IEducationLevelService service, AddEducationLevelDto dto) =>
+        group.MapPost("", async ([FromServices] IEducationLevelService service, AddEducationLevelDto dto) =>
         {
             var response = await service.AddEducationLevel(dto);
 
@@ -38,7 +39,7 @@ public static class EducationLevelsEndpoints
 
         //Update education level by id
         //PUT /api/educations-levels
-        group.MapPut("", async (IEducationLevelService service, UpdateEducationLevelDto dto) =>
+        group.MapPut("", async ([FromServices] IEducationLevelService service, UpdateEducationLevelDto dto) =>
         {
             var response = await service.UpdateEducationLevel(dto);
 
@@ -50,7 +51,7 @@ public static class EducationLevelsEndpoints
 
         //Delete education level by id
         //DELETE /api/educations-levels/:id
-        group.MapDelete("{id:int}", async (IEducationLevelService service, int id) =>
+        group.MapDelete("{id:int}", async ([FromServices] IEducationLevelService service, int id) =>
         {
             var response = await service.DeleteEducationLevel(id);
 
