@@ -1,6 +1,7 @@
 using FluentValidation;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Models.DTOs.Person;
 using MouqimApi.Data;
 
@@ -89,6 +90,20 @@ public class PersonService(
                 Message = "Family, occupation or education level not found"
             };
 
+        if (dto.RelationType == RelationType.Head)
+        {
+            var existingHead = await context.Persons.AsNoTracking()
+                .Where(p => p.RelationType == RelationType.Head && p.FamilyId == dto.FamilyId)
+                .FirstOrDefaultAsync();
+
+            if (existingHead != null)
+                return new PersonResponseDto
+                {
+                    Success = false,
+                    Message = "Family head already has a head"
+                };
+        }
+
         var newPerson = dto.Adapt<Models.Entities.Person>();
         context.Persons.Add(newPerson);
         await context.SaveChangesAsync();
@@ -154,6 +169,20 @@ public class PersonService(
                 Success = false,
                 Message = "Family, occupation or education level not found"
             };
+
+        if (dto.RelationType == RelationType.Head)
+        {
+            var existingHead = await context.Persons.AsNoTracking()
+                .Where(p => p.RelationType == RelationType.Head && p.FamilyId == dto.FamilyId)
+                .FirstOrDefaultAsync();
+
+            if (existingHead != null)
+                return new PersonResponseDto
+                {
+                    Success = false,
+                    Message = "Family head already has a head"
+                };
+        }
 
         existingPerson.FullName = dto.FullName;
         existingPerson.NationalNo = dto.NationalNo;
