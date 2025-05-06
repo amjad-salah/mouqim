@@ -100,7 +100,7 @@ public class PersonService(
                 return new PersonResponseDto
                 {
                     Success = false,
-                    Message = "Family head already has a head"
+                    Message = "Family already has a head"
                 };
         }
 
@@ -170,7 +170,7 @@ public class PersonService(
                 Message = "Family, occupation or education level not found"
             };
 
-        if (dto.RelationType == RelationType.Head)
+        if (dto.RelationType == RelationType.Head && existingPerson.RelationType != RelationType.Head)
         {
             var existingHead = await context.Persons.AsNoTracking()
                 .Where(p => p.RelationType == RelationType.Head && p.FamilyId == dto.FamilyId)
@@ -180,7 +180,7 @@ public class PersonService(
                 return new PersonResponseDto
                 {
                     Success = false,
-                    Message = "Family head already has a head"
+                    Message = "Family already has a head"
                 };
         }
 
