@@ -1,6 +1,8 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.DTOs;
 using Models.DTOs.EducationLevel;
 using Models.DTOs.Family;
 using Models.DTOs.Occupation;
@@ -28,7 +30,24 @@ builder.Services.AddExceptionHandler<AppExceptionHandler>();
 builder.Services.AddDbContext<MouqimDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAuthentication().AddCookie("default");
+builder.Services.AddAuthentication().AddCookie("default", options =>
+{
+    //Configure a default redirect to log in and access denied behavior
+    options.Events = new CookieAuthenticationEvents
+    {
+        OnRedirectToLogin = (ctx) =>
+        {
+            ctx.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        },
+
+        OnRedirectToAccessDenied = (ctx) =>
+        {
+            ctx.Response.StatusCode = 403;
+            return Task.CompletedTask;
+        }
+    };
+});
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
 
