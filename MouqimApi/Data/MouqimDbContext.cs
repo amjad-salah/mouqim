@@ -50,4 +50,5 @@ public class MouqimDbContext(DbContextOptions<MouqimDbContext> options) : DbCont
     public DbSet<Family> Families { get; set; }
     public DbSet<Occupation> Occupations { get; set; }
     public DbSet<EducationLevel> EducationLevels { get; set; }
+    public DbSet<User> Users { get; set; }
 }

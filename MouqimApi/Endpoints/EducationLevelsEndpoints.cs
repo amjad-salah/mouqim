@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.EducationLevel;
 using MouqimApi.Services.EducationLevel;
@@ -12,7 +13,7 @@ public static class EducationLevelsEndpoints
 
         //Get all education levels
         //GET /api/educations-levels
-        group.MapGet("", async ([FromServices] IEducationLevelService service) =>
+        group.MapGet("", [Authorize(Roles = "Admin,User")] async ([FromServices] IEducationLevelService service) =>
         {
             var response = await service.GetAllEducationLevels();
 
@@ -21,45 +22,49 @@ public static class EducationLevelsEndpoints
 
         //Get education level by id
         //GET /api/educations-levels/:id
-        group.MapGet("{id:int}", async ([FromServices] IEducationLevelService service, int id) =>
-        {
-            var response = await service.GetEducationLevelById(id);
+        group.MapGet("{id:int}", [Authorize(Roles = "Admin,User")]
+            async ([FromServices] IEducationLevelService service, int id) =>
+            {
+                var response = await service.GetEducationLevelById(id);
 
-            return !response.Success ? Results.NotFound(response) : Results.Ok(response);
-        });
+                return !response.Success ? Results.NotFound(response) : Results.Ok(response);
+            });
 
         //Add a new education level
         //POST /api/educations-levels
-        group.MapPost("", async ([FromServices] IEducationLevelService service, AddEducationLevelDto dto) =>
-        {
-            var response = await service.AddEducationLevel(dto);
+        group.MapPost("", [Authorize(Roles = "Admin,User")]
+            async ([FromServices] IEducationLevelService service, AddEducationLevelDto dto) =>
+            {
+                var response = await service.AddEducationLevel(dto);
 
-            return !response.Success ? Results.BadRequest(response) : Results.Created("", response);
-        });
+                return !response.Success ? Results.BadRequest(response) : Results.Created("", response);
+            });
 
         //Update education level by id
         //PUT /api/educations-levels
-        group.MapPut("", async ([FromServices] IEducationLevelService service, UpdateEducationLevelDto dto) =>
-        {
-            var response = await service.UpdateEducationLevel(dto);
+        group.MapPut("", [Authorize(Roles = "Admin,User")]
+            async ([FromServices] IEducationLevelService service, UpdateEducationLevelDto dto) =>
+            {
+                var response = await service.UpdateEducationLevel(dto);
 
-            if (!response.Success && response.Message! == "Education level not found")
-                return Results.NotFound(response);
+                if (!response.Success && response.Message! == "Education level not found")
+                    return Results.NotFound(response);
 
-            return !response.Success ? Results.BadRequest(response) : Results.Ok(response);
-        });
+                return !response.Success ? Results.BadRequest(response) : Results.Ok(response);
+            });
 
         //Delete education level by id
         //DELETE /api/educations-levels/:id
-        group.MapDelete("{id:int}", async ([FromServices] IEducationLevelService service, int id) =>
-        {
-            var response = await service.DeleteEducationLevel(id);
+        group.MapDelete("{id:int}", [Authorize(Roles = "Admin,User")]
+            async ([FromServices] IEducationLevelService service, int id) =>
+            {
+                var response = await service.DeleteEducationLevel(id);
 
-            if (!response.Success && response.Message! == "Education level not found")
-                return Results.NotFound(response);
+                if (!response.Success && response.Message! == "Education level not found")
+                    return Results.NotFound(response);
 
-            return !response.Success ? Results.BadRequest(response) : Results.Ok(response);
-        });
+                return !response.Success ? Results.BadRequest(response) : Results.Ok(response);
+            });
 
         return group;
     }
